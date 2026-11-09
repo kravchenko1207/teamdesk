@@ -1,0 +1,20 @@
+### Create a ticket
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Cannot connect to VPN",
+  "description": "VPN connection fails when working from home."
+}
+
+### Get all tickets
+GET http://localhost:8080/api/tickets
+
+### Reject a blank title
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "   ",
+  "description": "VPN connection fails."
+}
