@@ -27,3 +27,9 @@ Content-Type: application/json
   "title": "",
   "description": ""
 }
+
+### Get an existing ticket
+GET http://localhost:8080/api/tickets/1
+
+### Get a missing ticket
+GET http://localhost:8080/api/tickets/999999

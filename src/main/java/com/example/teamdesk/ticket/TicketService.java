@@ -35,6 +35,13 @@ public class TicketService {
         return toResponse(savedTicket);
     }
 
+    public TicketResponse getTicketById(Long id) {
+      Ticket ticket = ticketRepository.findById(id)
+              .orElseThrow(() -> new TicketNotFoundException(id));
+
+      return toResponse(ticket);
+    }
+
     public TicketResponse toResponse(Ticket ticket) {
       return new TicketResponse(
               ticket.getId(),

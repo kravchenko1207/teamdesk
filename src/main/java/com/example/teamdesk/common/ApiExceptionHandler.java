@@ -1,11 +1,12 @@
 package com.example.teamdesk.common;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.example.teamdesk.ticket.TicketNotFoundException;
 
 import java.util.List;
 
@@ -33,6 +34,20 @@ public class ApiExceptionHandler {
 
         problem.setTitle("Validation failed");
         problem.setProperty("errors", errors);
+
+        return problem;
+    }
+
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ProblemDetail handleTicketNotFound(
+            TicketNotFoundException exception
+    ) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                exception.getMessage()
+        );
+
+        problem.setTitle("Ticket not found");
 
         return problem;
     }
