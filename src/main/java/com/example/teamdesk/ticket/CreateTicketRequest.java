@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Size;
 
 public record CreateTicketRequest(
 
-        @NotBlank
-        @Size(max = 150)
+        @NotBlank(message = "Title must not be blank")
+        @Size(max = 150, message = "Title must not exceed 150 characters")
         String title,
 
-        @NotBlank
-        @Size(max = 5000)
+        @NotBlank(message = "Description must not be blank")
+        @Size(max = 5000, message = "Description must not exceed 5000 characters")
         String description
 ) {
 }

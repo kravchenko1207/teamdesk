@@ -18,3 +18,12 @@ Content-Type: application/json
   "title": "   ",
   "description": "VPN connection fails."
 }
+
+### Reject two blank fields
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": ""
+}
