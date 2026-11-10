@@ -1,32 +1,46 @@
 package com.example.teamdesk.ticket;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TicketService {
 
-    private final List<TicketResponse> tickets = new ArrayList<>();
-    private long nextId = 1;
+  private final TicketRepository ticketRepository;
 
-    public synchronized List<TicketResponse> getTickets() {
-        return List.copyOf(tickets);
+  public TicketService(TicketRepository ticketRepository) {
+    this.ticketRepository = ticketRepository;
+  }
+
+  public List<TicketResponse> getTickets() {
+      return ticketRepository.findAll(Sort.by("id"))
+              .stream()
+              .map(this::toResponse)
+              .toList();
     }
 
-    public synchronized TicketResponse createTicket(
-            CreateTicketRequest request
-    ) {
-        TicketResponse ticket = new TicketResponse(
-                nextId++,
+    @Transactional
+    public TicketResponse createTicket(CreateTicketRequest request) {
+        Ticket ticket = new Ticket(
                 request.title(),
-                request.description(),
-                TicketStatus.OPEN
+                request.description()
         );
 
-        tickets.add(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
 
-        return ticket;
+        return toResponse(savedTicket);
+    }
+
+    public TicketResponse toResponse(Ticket ticket) {
+      return new TicketResponse(
+              ticket.getId(),
+              ticket.getTitle(),
+              ticket.getDescription(),
+              ticket.getStatus()
+      );
     }
 }
